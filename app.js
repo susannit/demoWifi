@@ -45,15 +45,7 @@ var database = mongodb.MongoClient.connect(process.env.MONGOLAB_AMBER_URI, funct
   // Save database object from the callback for reuse.
 db = database;
 
-/**
- * Enable CORS (http://enable-cors.org/server_expressjs.html)
- * to allow different clients to request data from your server
- */
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+
 
 var clientPath = path.resolve(__dirname, '/client');
 
