@@ -36,7 +36,7 @@ var gateway = braintree.connect({
 var db;
 
 // Connect to the database before starting the application server.
-mongodb.MongoClient.connect(process.env.MONGOLAB_AMBER_URI, function (err, database) {
+var database = mongodb.MongoClient.connect(process.env.MONGOLAB_AMBER_URI, function (err, database) {
   if (err) {
     console.log(err);
     process.exit(1);
