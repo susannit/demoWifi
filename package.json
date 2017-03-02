@@ -4,7 +4,7 @@
   "description": "Wifi On the Go App",
   "main": "app.js",
   "scripts": {
-    "start": "set DEBUG=express:* & node app",
+    "start": "node app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sudharsan",
