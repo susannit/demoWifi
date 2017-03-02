@@ -31,8 +31,6 @@ var gateway = braintree.connect({
   var server = app.listen(process.env.PORT || 8080, function () {
     console.log("App now running on port", server.address().port);
   });
-});
-
 
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
