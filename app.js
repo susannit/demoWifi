@@ -55,7 +55,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-var clientPath = path.resolve(__dirname, '/client');
+var clientPath = path.resolve(__dirname, 'client');
 
 console.log(clientPath);
  app.use(express.static(clientPath));
