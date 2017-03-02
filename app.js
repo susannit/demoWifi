@@ -64,6 +64,9 @@ console.log(clientPath);
      res.sendFile('UserInfo.html', {root: clientPath});
  });
 
+
+app.use('/scripts', express.static(__dirname + '/node_modules/braintree-web/dist/'));
+
 /**
  * Route that returns a token to be used on the client side to tokenize payment details
  */
