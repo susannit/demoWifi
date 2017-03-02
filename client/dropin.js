@@ -11,7 +11,7 @@ var app = angular.module('WifiGoApp', []);
 
       $http({
         method: 'POST',
-        url: process.env.WIFI_APP_URL+'/clientoken'
+        url:'/clientoken'
       }).success(function (data) {
 
         console.log(data.client_token);
