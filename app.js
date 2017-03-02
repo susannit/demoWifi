@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
+console.log(ObjectID);
 /**
  * Instantiate your server and a JSON parser to parse all incoming requests
  */
