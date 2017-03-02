@@ -26,7 +26,7 @@ var app = angular.module('WifiGoApp', []);
 
             $http({
               method: 'POST',
-              url: 'http://localhost:3000/api/v1/process',
+              url: '/process',
               data: {
                 amount: $scope.amount,
                 payment_method_nonce: nonce
@@ -82,6 +82,13 @@ var app = angular.module('WifiGoApp', []);
 							"postalcode":$scope.userInfo.postalcode,
 							"country":$scope.userInfo.country
 						}
+						$http({
+								method: 'POST',
+								url: '/api/userInfo',
+								data: dataObject
+							  }).success(function (data) {
+							   }).error(function (error) {
+							  });
 						console.log(dataObject);
 					}
 				}]);		
