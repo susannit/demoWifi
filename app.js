@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
-console.log(ObjectID);
+app.use(jsonParser);
 /**
  * Instantiate your server and a JSON parser to parse all incoming requests
  */
@@ -56,8 +56,7 @@ app.use(function(req, res, next) {
 });
 
 var clientPath = path.resolve(__dirname, 'client');
-
-console.log(clientPath);
+	
  app.use(express.static(clientPath));
  app.get('/', function(req, res){
 		console.log(clientPath);
@@ -96,7 +95,7 @@ app.post('/process', jsonParser, function (request, response) {
 
 //Create Userinfo
 app.post("/api/userInfo", function(req, res) {
-	console.log(req);
+	console.log(req.body);
   var newContact = req.body;
   newContact['createDate'] = new Date();
 
