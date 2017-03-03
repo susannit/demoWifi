@@ -96,6 +96,7 @@ app.post('/process', jsonParser, function (request, response) {
 
 //Create Userinfo
 app.post("/api/userInfo", function(req, res) {
+	console.log(req.body);
   var newContact = req.body;
   newContact['createDate'] = new Date();
 
