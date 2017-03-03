@@ -97,7 +97,7 @@ app.post('/process', jsonParser, function (request, response) {
 //Create Userinfo
 app.post("/api/userInfo", function(req, res) {
   var newContact = req.body;
-  newContact.createDate = new Date();
+  newContact[createDate] = new Date();
 
   db.collection('WifiUserInfo').insertOne(newContact, function(err, doc) {
     if (err) {
