@@ -8,13 +8,13 @@ var bodyParser = require('body-parser');
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
-app.use(jsonParser);
+
 /**
  * Instantiate your server and a JSON parser to parse all incoming requests
  */
 var app = express();
 var jsonParser = bodyParser.json();
-
+app.use(jsonParser);
 /**
  * Instantiate your gateway (update here with your Braintree API Keys)
  */
