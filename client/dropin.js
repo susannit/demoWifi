@@ -69,10 +69,12 @@ var app = angular.module('WifiGoApp', []);
   }]);
   
   app.controller("UserInfoController", ['$scope', '$http', function ($scope, $http){
-					$scope.userInfo = {}
+					$scope.userInfo = {};
+					$scope.userInfoList = {};
 					$scope.userInfo.submitUserInfo=function(item,event){
 						console.log("form submit");
 						var dataObject = {
+							"shiplocation":$scope.userInfo.shiplocation,
 							"firstName":$scope.userInfo.firstName,
 							"lastName":$scope.userInfo.lastName,
 							"address1":$scope.userInfo.address1,
@@ -87,9 +89,22 @@ var app = angular.module('WifiGoApp', []);
 								url: '/api/userInfo',
 								data: dataObject
 							  }).success(function (data) {
+									$scope.getUsersList()
 							   }).error(function (error) {
 							  });
 						console.log(dataObject);
 					}
-				}]);		
+					
+					$scope.getUsersList=function(){
+						$http({
+							method: 'GET',
+							url:'/api/userInfo'
+						  }).success(function (data) {
+								$scope.userInfoList = data;
+						  }).error(function (error) {
+						  });
+					}
+					
+					$scope.getUsersList();
+				}]);
   
