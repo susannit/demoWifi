@@ -35,75 +35,77 @@ var gateway = braintree.connect({
 var db;
 
 // Connect to the database before starting the application server.
-var database = mongodb.MongoClient.connect(process.env.MONGOLAB_AMBER_URI, function (err, database) {
+mongodb.MongoClient.connect(process.env.MONGOLAB_AMBER_URI, function (err, database) {
   if (err) {
     console.log(err);
     process.exit(1);
   }
-});
+	db = database;
 
-  // Save database object from the callback for reuse.
-db = database;
 
-/**
- * Enable CORS (http://enable-cors.org/server_expressjs.html)
- * to allow different clients to request data from your server
- */
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+    // Save database object from the callback for reuse.
+	db = database;
 
-var clientPath = path.resolve(__dirname, 'client');
+	/**
+	 * Enable CORS (http://enable-cors.org/server_expressjs.html)
+	 * to allow different clients to request data from your server
+	 */
+	app.use(function(req, res, next) {
+	  res.header("Access-Control-Allow-Origin", "*");
+	  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	  next();
+	});
+
+	var clientPath = path.resolve(__dirname, 'client');
 	
- app.use(express.static(clientPath));
- app.get('/', function(req, res){
-		console.log(clientPath);
-     res.sendFile('UserInfo.html', {root: clientPath});
- });
+	 app.use(express.static(clientPath));
+	 app.get('/', function(req, res){
+			console.log(clientPath);
+		 res.sendFile('UserInfo.html', {root: clientPath});
+	 });
 
 
-app.use('/scripts', express.static(__dirname + '/node_modules/braintree-web/dist/'));
+	app.use('/scripts', express.static(__dirname + '/node_modules/braintree-web/dist/'));
 
-/**
- * Route that returns a token to be used on the client side to tokenize payment details
- */
-app.post('/clientoken', function (request, response) {
-  gateway.clientToken.generate({}, function (err, res) {
-    if (err) throw err;
-    response.json({
-      "client_token": res.clientToken
-    });
-  });
-});
+	/**
+	 * Route that returns a token to be used on the client side to tokenize payment details
+	 */
+	app.post('/clientoken', function (request, response) {
+	  gateway.clientToken.generate({}, function (err, res) {
+		if (err) throw err;
+		response.json({
+		  "client_token": res.clientToken
+		});
+	  });
+	});
 
-/**
- * Route to process a sale transaction
- */
-app.post('/process', jsonParser, function (request, response) {
-  var transaction = request.body;
-  gateway.transaction.sale({
-    amount: transaction.amount,
-    paymentMethodNonce: transaction.payment_method_nonce
-  }, function (err, result) {
-    if (err) throw err;
-    console.log(util.inspect(result));
-    response.json(result);
-  });
-});
+	/**
+	 * Route to process a sale transaction
+	 */
+	app.post('/process', jsonParser, function (request, response) {
+	  var transaction = request.body;
+	  gateway.transaction.sale({
+		amount: transaction.amount,
+		paymentMethodNonce: transaction.payment_method_nonce
+	  }, function (err, result) {
+		if (err) throw err;
+		console.log(util.inspect(result));
+		response.json(result);
+	  });
+	});
 
-//Create Userinfo
-app.post("/api/userInfo", function(req, res) {
-	console.log(req.body);
-  var newContact = req.body;
-  newContact['createDate'] = new Date();
+	//Create Userinfo
+	app.post("/api/userInfo", function(req, res) {
+		console.log(req.body);
+	  var newContact = req.body;
+	  newContact['createDate'] = new Date();
 
-  db.collection('WifiUserInfo').insertOne(newContact, function(err, doc) {
-    if (err) {
-      handleError(res, err.message, "Failed to create new User.");
-    } else {
-      res.status(201).json(doc.ops[0]);
-    }
-  });
+	  db.collection('WifiUserInfo').insertOne(newContact, function(err, doc) {
+		if (err) {
+		  handleError(res, err.message, "Failed to create new User.");
+		} else {
+		  res.status(201).json(doc.ops[0]);
+		}
+	  });
+	});
 });
