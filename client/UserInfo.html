@@ -10,28 +10,64 @@
 	<script src="/scripts/braintree.js"></script>
      </head>
 <body >
-	<div id="wifiUserInfo" ng-controller="UserInfoController">
-		<form>
-			Shipping Location: <input type="text" name="shipLocation" ng-model="userInfo.shiplocation"> <br/>
-			First Name: <input type="text" name="firstName" ng-model="userInfo.firstName"> <br/>
-			Last Name: <input type="text" name="lastName" ng-model="userInfo.lastName"> <br/>
-			Billing Address: <input type="text" name="address1" ng-model="userInfo.address1"> <br/>
-			Billing Address: <input type="text" name="address2" ng-model="userInfo.address2"> <br/>
-			City: <input type="text" name="city" ng-model="userInfo.city"> <br/>
-			State/Province: <input type="text" name="state" ng-model="userInfo.state"> <br/>
-			Zip/Postal Code: <input type="text" name="postalcode" ng-model="userInfo.postalcode"> <br/>
-			Country: <input type="text" name="country" ng-model="userInfo.country"> <br/>
-			<button ng-click="userInfo.submitUserInfo()"> Submit</button>
-		</form>
+<div id="wifiUserInfo" ng-controller="UserInfoController" style="width:100%">
+		<div id="userInfoForm" style="width:30%">
+			<form>
+				Shipping Location: <input type="text" ng-model="userInfo.shiplocation"> <br/>
+				First Name: <input type="text" ng-model="userInfo.firstName"> <br/>
+				Last Name: <input type="text" ng-model="userInfo.lastName"> <br/>
+				Billing Address: <input type="text" ng-model="userInfo.address1"> <br/>
+				Billing Address: <input type="text" ng-model="userInfo.address2"> <br/>
+				City: <input type="text" ng-model="userInfo.city"> <br/>
+				State/Province: <input type="text" ng-model="userInfo.state"> <br/>
+				Zip/Postal Code: <input type="text" ng-model="userInfo.postalcode"> <br/>
+				Country: <input type="text" ng-model="userInfo.country"> <br/>
+				<button ng-click="userInfo.submitUserInfo()"> Submit</button>
+			</form>
+		</div>
+		<div id="usersList" style="width:70%">
+			<h1 id="title">User Information List</h1>
+
+			<table width="100%" cellpadding="4" cellspacing="25" style="margin-top:-118px">
+				<thead align="center">					
+					<th>Shipping Location</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Address1</th>
+					<th>Address2</th>
+					<th>City</th>
+					<th>State/Province</th>
+					<th>Zip/Postal code</th>
+					<th>Country</th>
+					<th>Object Id</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="user in userInfoList">
+						<td>{{user.shiplocation}}</td>
+						<td>{{user.firstName}}</td>
+						<td>{{user.lastName}}</td>
+						<td>{{user.address1}}</td>
+						<td>{{user.address2}}</td>
+						<td>{{user.city}}</td>
+						<td>{{user.state}}</td>
+						<td>{{user.postalcode}}</td>
+						<td>{{user.country}}</td>
+						<td>{{user._id}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
-	<div id="wifiPay" ng-controller="DropinController">
-		Amount: <input name="Amount" disabled value = 20>
+	
+	<div id="wifiPay" ng-controller="DropinController">		
+		<span><p ng-bind="message"></p></span>
 		<div class="dropin-container" ng-show="showDropinContainer">
         <form name="payment">
+			Amount: <input disabled value = "20" ng-model="amount">
 			<div> The Amount is determined value of 20$</div>
           <!-- Add Dropin here -->
           <div id="checkout"></div>       
-	<md-button class="md-raised md-primary" type="submit">Pay Now</md-button>
+		  <button type="submit">Pay $20</button>
         </form>
       </div>
 	</div>		
