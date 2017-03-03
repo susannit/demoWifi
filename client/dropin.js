@@ -85,7 +85,7 @@ var app = angular.module('WifiGoApp', []);
 						$http({
 								method: 'POST',
 								url: '/api/userInfo',
-								data: dataObject
+								data: JSON.stringify(dataObject)
 							  }).success(function (data) {
 							   }).error(function (error) {
 							  });
