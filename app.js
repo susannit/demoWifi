@@ -6,7 +6,8 @@ var path = require('path');
 var braintree = require('braintree');
 var bodyParser = require('body-parser');
 var mongodb = require("mongodb");
-var ObjectID = mongodb.ObjectID;
+var userInfoApi = require("./userInfo.js");
+var payInfoApi = require("./btInfo.js");
 
 
 /**
@@ -80,32 +81,49 @@ mongodb.MongoClient.connect(process.env.MONGOLAB_AMBER_URI, function (err, datab
 	});
 
 	/**
-	 * Route to process a sale transaction
-	 */
-	app.post('/process', jsonParser, function (request, response) {
-	  var transaction = request.body;
-	  gateway.transaction.sale({
-		amount: transaction.amount,
-		paymentMethodNonce: transaction.payment_method_nonce
-	  }, function (err, result) {
-		if (err) throw err;
-		console.log(util.inspect(result));
-		response.json(result);
-	  });
+ * Route to process a sale transaction
+ */
+ 
+ var paymentInfoApi = new payInfoApi(db.collection(process.env.PAYMENT_INFO_COLLECTION));
+app.post('/process', jsonParser, function (request, response) {
+  var transaction = request.body;
+  gateway.transaction.sale({
+    amount: transaction.amount,
+    paymentMethodNonce: transaction.payment_method_nonce
+  }, function (err, result) {
+    if (err) throw err;
+	var respObj={
+		amount:transaction.amount,
+		btresponse:result
+	}
+	paymentInfoApi.savePaymentResponse(respObj, function(err,resp){
 	});
+    response.json(result);
+  });
+});
 
-	//Create Userinfo
-	app.post("/api/userInfo", function(req, res) {
-		console.log(req.body);
-	  var newContact = req.body;
-	  newContact['createDate'] = new Date();
+var userApi = new userInfoApi(db.collection(process.env.USERINFO_COLLECTION));
 
-	  db.collection('WifiUserInfo').insertOne(newContact, function(err, doc) {
+//Create Userinfo
+app.post("/api/userInfo", function(req, res) {
+	var saveUser = userApi.createUser(req.body,function (err,doc){
 		if (err) {
 		  handleError(res, err.message, "Failed to create new User.");
 		} else {
 		  res.status(201).json(doc.ops[0]);
 		}
-	  });
+	});   
+ });
+
+//getUserInfo
+	app.get("/api/userInfo", function(req, res) {
+		userApi.getUserList(function(err,docs){
+			if (err) {
+			  handleError(res, err.message, "Failed to get contacts.");
+			} else {
+			  res.status(201).json(docs);
+			}
+		});
 	});
+
 });
