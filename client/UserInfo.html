@@ -25,7 +25,7 @@
 				<button ng-click="userInfo.submitUserInfo()"> Submit</button>
 			</form>
 		</div>
-		<div id="usersList" style="width:70%">
+		<div id="usersList" style="width:70%;float:right;">
 			<h1 id="title">User Information List</h1>
 
 			<table width="100%" cellpadding="4" cellspacing="25" style="margin-top:-118px">
@@ -63,7 +63,7 @@
 		<span><p ng-bind="message"></p></span>
 		<div class="dropin-container" ng-show="showDropinContainer">
         <form name="payment">
-			Amount: <input disabled value = "20" ng-model="amount">
+			Amount: <input type="text" disabled="disabled"  ng-model="amount">
 			<div> The Amount is determined value of 20$</div>
           <!-- Add Dropin here -->
           <div id="checkout"></div>       
