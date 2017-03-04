@@ -1,27 +1,23 @@
 'use strict';
-
-userInfoApi=function(db) {
-		 var user_collection = db.collection('WifiUserInfo');
-		 
-		 this.createUser=function (userObj){
-		 var newContact = req.body;
+module.exports=function(user_collection){
+  var userInfoApi={};
+ userInfoApi.createUser=function(userObj,cb){
+		 var newContact = userObj;
 		 newContact['createDate'] = new Date();
 		 user_collection.insertOne(newContact, function(err, doc) {  
-			return {
-				err: err,
-				doc: doc
-			};
+			if (err){
+				return cb(err);
+			}
+			 cb(null,doc)
 		});
-		}
-	
-		this.getUserList=function(){
-			 user_collection.find({}).toArray(function(err, docs) {
-				return {
-				err: err,
-				docs: docs
-				};
-			});
-		}
-		
-};
-exports.userInfoApi=userInfoApi
+		};	
+ userInfoApi.getUserList=function(cb){
+		user_collection.find({}).toArray(function(err, docs) {
+			if (err){
+				return cb(err);
+			}
+			 cb(null,docs)
+		});
+	};
+	return userInfoApi;
+}
