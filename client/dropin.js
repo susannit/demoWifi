@@ -1,7 +1,7 @@
 var app = angular.module('WifiGoApp', []);
   
   app.controller('DropinController', ['$scope', '$http', function ($scope, $http) {
-
+    $scope.amount=20;
     $scope.message = 'Please use the form below to pay:';
     $scope.showDropinContainer = true;
     $scope.isError = false;
@@ -13,9 +13,6 @@ var app = angular.module('WifiGoApp', []);
         method: 'POST',
         url:'/clientoken'
       }).success(function (data) {
-
-        console.log(data.client_token);
-
         braintree.setup(data.client_token, 'dropin', {
           container: 'checkout',
           // Form is not submitted by default when paymentMethodNonceReceived is implemented
@@ -32,15 +29,11 @@ var app = angular.module('WifiGoApp', []);
                 payment_method_nonce: nonce
               }
             }).success(function (data) {
-
-              console.log(data.success);
-
               if (data.success) {
                 $scope.message = 'Payment authorized, thanks.';
                 $scope.showDropinContainer = false;
                 $scope.isError = false;
                 $scope.isPaid = true;
-
               } else {
                 // implement your solution to handle payment failures
                 $scope.message = 'Payment failed: ' + data.message + ' Please refresh the page and try again.';
