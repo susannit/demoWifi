@@ -23,5 +23,21 @@ getToken=function(req,res){
 	  });
 }
 
+module.exports.sellAmount = function (request, response) {
+  var transaction = request.body;
+  gateway.transaction.sale({
+    amount: transaction.amount,
+    paymentMethodNonce: transaction.payment_method_nonce
+  }, function (err, result) {
+    if (err) throw err;
+	var respObj={
+		amount:transaction.amount,
+		btresponse:result
+	}
+	paymentInfoApi.savePaymentResponse(respObj, function(err,resp){
+	});
+    response.json(result);
+  });
+}
 module.exports = gateway;
 module.exports = getToken;
