@@ -58,14 +58,7 @@ mongodb.MongoClient.connect(process.env.MONGOLAB_AMBER_URI, function (err, datab
 	/**
 	 * Route that returns a token to be used on the client side to tokenize payment details
 	 */
-	app.post('/clientoken', function (request, response) {
-	  gateway.clientToken.generate({}, function (err, res) {
-		if (err) throw err;
-		response.json({
-		  "client_token": res.clientToken
-		});
-	  });
-	});
+	app.post('/clientoken', gateway.getToken()});
 
 	/**
  * Route to process a sale transaction
