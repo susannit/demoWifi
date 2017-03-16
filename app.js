@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var mongodb = require("mongodb");
 var userInfoApi = require("./userInfo.js");
 var payInfoApi = require("./btInfo.js");
-
+var gateway = require("./gateway.js")
 
 /**
  * Instantiate your server and a JSON parser to parse all incoming requests
