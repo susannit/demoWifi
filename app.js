@@ -3,7 +3,6 @@
 var util = require('util');
 var express = require('express');
 var path = require('path');
-var braintree = require('braintree');
 var bodyParser = require('body-parser');
 var mongodb = require("mongodb");
 var userInfoApi = require("./userInfo.js");
@@ -16,16 +15,6 @@ var payInfoApi = require("./btInfo.js");
 var app = express();
 var jsonParser = bodyParser.json();
 app.use(jsonParser);
-/**
- * Instantiate your gateway (update here with your Braintree API Keys)
- */
-var environment = process.env.BT_ENVIRONMENT.charAt(0).toUpperCase() + process.env.BT_ENVIRONMENT.slice(1);
-var gateway = braintree.connect({
-  environment:  braintree.Environment[environment],
-  merchantId:   process.env.BT_MERCHANT_ID,
-  publicKey:    process.env.BT_PUBLIC_KEY,
-  privateKey:   process.env.BT_PRIVATE_KEY
-});
 
 
  // Initialize the app.
