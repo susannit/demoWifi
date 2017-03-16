@@ -41,8 +41,6 @@ mongodb.MongoClient.connect(process.env.MONGOLAB_AMBER_URI, function (err, datab
     console.log(err);
     process.exit(1);
   }
-	db = database;
-
 
     // Save database object from the callback for reuse.
 	db = database;
