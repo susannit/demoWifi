@@ -65,12 +65,7 @@ mongodb.MongoClient.connect(process.env.MONGOLAB_AMBER_URI, function (err, datab
  */
  
  var paymentInfoApi = new payInfoApi(db.collection(process.env.PAYMENT_INFO_COLLECTION));
-app.post('/process', jsonParser, function (request, response) {
-  var transaction = request.body;
-  gateway.transaction.sale({
-    amount: transaction.amount,
-    paymentMethodNonce: transaction.payment_method_nonce
-  }, function (err, result) {
+app.post('/process', jsonParser,gateway.sellAmount(request,response), function (err, result) {
     if (err) throw err;
 	var respObj={
 		amount:transaction.amount,
