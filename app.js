@@ -26,58 +26,46 @@ var db;
 
 // Connect to the database before starting the application server.
 mongodb.MongoClient.connect(process.env.MONGOLAB_AMBER_URI, function (err, database) {
-  if (err) {
+ if (err) {
     console.log(err);
     process.exit(1);
-  }
+  } db = database;
+  
+  /**
+ * Enable CORS (http://enable-cors.org/server_expressjs.html)
+ * to allow different clients to request data from your server
+ */
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
-    // Save database object from the callback for reuse.
-	db = database;
+app.use(jsonParser);
+var clientPath = path.resolve(__dirname, 'client');
 
-	/**
-	 * Enable CORS (http://enable-cors.org/server_expressjs.html)
-	 * to allow different clients to request data from your server
-	 */
-	app.use(function(req, res, next) {
-	  res.header("Access-Control-Allow-Origin", "*");
-	  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	  next();
-	});
-
-	var clientPath = path.resolve(__dirname, 'client');
-	
-	 app.use(express.static(clientPath));
-	 app.get('/', function(req, res){
-			console.log(clientPath);
-		 res.sendFile('UserInfo.html', {root: clientPath});
-	 });
+console.log(clientPath);
+ app.use(express.static(clientPath));
+ app.get('/', function(req, res){
+     res.sendFile('UserInfo.html', {root: clientPath});
+ });
 
 
-	app.use('/scripts', express.static(__dirname + '/node_modules/braintree-web/dist/'));
+app.use('/scripts', express.static(__dirname + '/node_modules/braintree-web/dist/'));
 
-	/**
-	 * Route that returns a token to be used on the client side to tokenize payment details
-	 */
-	app.post('/clientoken', gateway.getToken());
+/**
+ * Route that returns a token to be used on the client side to tokenize payment details
+ */
+app.post('/clientoken', gateway.getToken());
 
-	/**
+/**
  * Route to process a sale transaction
  */
  
- var paymentInfoApi = new payInfoApi(db.collection(process.env.PAYMENT_INFO_COLLECTION));
-app.post('/process', jsonParser,gateway.sellAmount(request,response), function (err, result) {
-    if (err) throw err;
-	var respObj={
-		amount:transaction.amount,
-		btresponse:result
-	}
-	paymentInfoApi.savePaymentResponse(respObj, function(err,resp){
-	});
-    response.json(result);
-  });
-});
-
-var userApi = new userInfoApi(db.collection(process.env.USERINFO_COLLECTION));
+ var paymentInfoApi = new payInfoApi(db.collection('WifiPaymentInfo'));
+app.post('/process', jsonParser,gateway.sellAmount(request,response));
+  
+  var userApi = new userInfoApi(db.collection('WifiUserInfo'));
 
 //Create Userinfo
 app.post("/api/userInfo", function(req, res) {
@@ -100,5 +88,6 @@ app.post("/api/userInfo", function(req, res) {
 			}
 		});
 	});
+
 
 });
