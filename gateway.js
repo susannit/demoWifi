@@ -28,6 +28,16 @@ module.exports.sellAmount = function (request, response) {
   gateway.transaction.sale({
     amount: transaction.amount,
     paymentMethodNonce: transaction.payment_method_nonce
+  }, function (err, result) {
+    if (err) throw err;
+	var respObj={
+		amount:transaction.amount,
+		btresponse:result
+	}
+	paymentInfoApi.savePaymentResponse(respObj, function(err,resp){
+	});
+    response.json(result);
+  })
   }
 module.exports = gateway;
 module.exports = getToken;
